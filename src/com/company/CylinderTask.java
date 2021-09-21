@@ -1,28 +1,23 @@
 package com.company;
 
 public class CylinderTask {
-    double doorHeight;
-    double doorWidth;
-    double cylinderRadius;
-    double cylinderHeight;
 
-    public CylinderTask(double doorHeight, double doorWidth, double cylinderRadius, double cylinderHeight) {
-        this.doorHeight = Math.max(doorHeight, doorWidth);
-        this.doorWidth = Math.min(doorHeight, doorWidth);
-        this.cylinderRadius = cylinderRadius;
-        this.cylinderHeight = cylinderHeight;
+    public CylinderTask() {
+
     }
 
-    void decision() {
+    public static String solution(double doorHeight, double doorWidth, double cylinderRadius, double cylinderHeight) {
         double diameter = cylinderRadius * 2;
         boolean check = false;
+        double a = Math.pow(cylinderHeight, 2) + Math.pow(diameter, 2);
+        double b = -2 * Math.pow(cylinderHeight, 2) * doorHeight;
+        double c = Math.pow(cylinderHeight, 2) * (Math.pow(doorHeight, 2) - Math.pow(diameter, 2));
         if ((diameter < doorHeight) && (cylinderHeight < doorWidth) || (diameter < doorWidth)) check = true;
         else {
-            Equation equation = new Equation(Math.pow(cylinderHeight, 2) + Math.pow(diameter, 2), -2 * Math.pow(cylinderHeight, 2) * doorHeight, Math.pow(cylinderHeight, 2) * (Math.pow(doorHeight, 2) - Math.pow(diameter, 2)));
-            double discrimimant = equation.dis();
+            double discrimimant = QuadraticEquation.discriminant(a, b, c);
             if (discrimimant >= 0) {
-                double m1 = (2 * doorHeight * Math.pow(cylinderHeight, 2) + Math.sqrt(discrimimant)) / (2 * (Math.pow(diameter, 2) + Math.pow(cylinderHeight, 2)));
-                double m2 = (2 * doorHeight * Math.pow(cylinderHeight, 2) - Math.sqrt(discrimimant)) / (2 * (Math.pow(diameter, 2) + Math.pow(cylinderHeight, 2)));
+                double m1 = (Double) QuadraticEquation.root1(a, b, c);
+                double m2 = (Double) QuadraticEquation.root2(a, b, c);
                 double mMax = Math.sqrt(Math.pow(cylinderHeight, 2) / 2);
                 if (m1 > 0 && m1 < mMax || m2 > 0 && m2 < mMax) {
                     double o = doorHeight - Math.max(m1, m2);
@@ -33,7 +28,7 @@ public class CylinderTask {
                 }
             }
         }
-        if (check) System.out.println("Пройдёт");
-        else System.out.println("Не пройдёт");
+        if (check) return "Пройдёт";
+        else return "Не пройдёт";
     }
 }
